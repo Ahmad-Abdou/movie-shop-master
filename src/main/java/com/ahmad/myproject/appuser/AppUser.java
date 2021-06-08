@@ -1,6 +1,9 @@
 package com.ahmad.myproject.appuser;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,14 +12,24 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
 @Entity
 public class AppUser implements UserDetails {
+
+
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
     @Id
-    @SequenceGenerator(name = "student_sequence",
-    sequenceName = "student_sequence",
-    allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "student_sequence")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
     private Long id;
     private String firstName;
     private String lastName;
@@ -37,10 +50,6 @@ public class AppUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
-    }
-
-    public AppUser() {
-
     }
 
     @Override
@@ -87,4 +96,4 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-    }
+}
