@@ -6,6 +6,6 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgres://ltvhxhxlpautap:f6691f9312138da319759a00028b5f82d6e96692afb03bdcf78e6e9d157807d5@ec2-3-231-69-204.compute-1.amazonaws.com:5432/ddptqk773ckib2
-    username: ltvhxhxlpautap
-    password: f6691f9312138da319759a00028b5f82d6e96692afb03bdcf78e6e9d157807d5
+    url: jdbc:postgres://jswtyqturdjopc:1fccba4e64eac1036cc1c985063839d7690b03fb744269a71871bc619eafbef5@ec2-54-220-35-19.eu-west-1.compute.amazonaws.com:5432/d4ua52gm9p2ukc
+    username: jswtyqturdjopc
+    password: 1fccba4e64eac1036cc1c985063839d7690b03fb744269a71871bc619eafbef5
