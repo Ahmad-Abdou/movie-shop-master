@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class MovieDto {
-    private String UUID;
+    private Long id;
     private String title;
     private double price;
     private String description;
     private int quantity;
+    private byte[] image;
+
 }

@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Collection;
-import java.util.Collections;
+
 
 @Getter
 @Setter
@@ -31,22 +30,22 @@ public class AppUser implements UserDetails {
             generator = "student_sequence"
     )
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String userName;
+    @Email(message = "please enter a valid email")
+    @Column(nullable = false,unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     private Boolean locked = false;
     private Boolean enabled = false;
 
-    public AppUser(String firstName,
-                   String lastName,
+    public AppUser(String userName,
                    String email,
                    String password,
                    AppUserRole appUserRole) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
@@ -54,9 +53,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
+        return appUserRole.getGrantedAuthority();
     }
 
     @Override
@@ -69,12 +66,8 @@ public class AppUser implements UserDetails {
         return email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getUserName() {
+        return userName;
     }
 
     @Override

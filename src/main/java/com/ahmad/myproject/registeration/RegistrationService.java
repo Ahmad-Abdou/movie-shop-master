@@ -1,54 +1,45 @@
 package com.ahmad.myproject.registeration;
 
-
 import com.ahmad.myproject.appuser.AppUser;
 import com.ahmad.myproject.appuser.AppUserRole;
-import com.ahmad.myproject.appuser.AppUserService;
-import com.ahmad.myproject.email.EmailSender;
 import com.ahmad.myproject.registeration.token.ConfirmationToken;
 import com.ahmad.myproject.registeration.token.ConfirmationTokenService;
+import com.ahmad.myproject.service.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
+
+import static com.ahmad.myproject.registeration.PasswordValidator.validator;
+
 
 @Service
 @AllArgsConstructor
 public class RegistrationService {
 
-    private final AppUserService appUserService;
     private final EmailValidator emailValidator;
+    private final AppUserService appUserService;
     private final ConfirmationTokenService confirmationTokenService;
-    private final EmailSender emailSender;
 
-    public String register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.
-                test(request.getEmail());
+    public String register(RegistrationRequest request){
+        boolean isValidEmail = emailValidator.test(request.getEmail());
 
-        if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
+        if(!isValidEmail){
+            throw  new IllegalStateException("Invalid email");
         }
+        validator(request.getPassword().length());
+        if(request.getEmail().contains("@gmail.com") || request.getEmail().contains("@hotmail.com")||request.getEmail().contains("@gmail.se")){
 
-        String token = appUserService.signUpUser(
-                new AppUser(
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getPassword(),
-                        AppUserRole.USER
+            String token =   appUserService.signUp(new AppUser(
+                    request.getUserName(),
+                    request.getEmail(),
+                    request.getPassword(),
+                    AppUserRole.USER));
+            return token;
+        }
+        else throw new IllegalStateException("Email is not valid");
 
-                )
-        );
-
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        emailSender.send(
-                request.getEmail(),
-                buildEmail(request.getFirstName(), link));
-
-        return token;
     }
-
     @Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
@@ -59,6 +50,7 @@ public class RegistrationService {
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("email already confirmed");
         }
+
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
@@ -71,6 +63,11 @@ public class RegistrationService {
                 confirmationToken.getAppUser().getEmail());
         return "confirmed";
     }
+
+
+
+
+
 
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +

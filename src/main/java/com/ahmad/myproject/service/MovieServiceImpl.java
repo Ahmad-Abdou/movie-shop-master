@@ -37,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDto findById(String id) {
+    public MovieDto findById(Long id) {
         Optional<Movie> book = movieRepo.findById(id);
         if(book.isPresent()){
             MovieDto movieDto = modelMapper.map(book.get(), MovieDto.class);
@@ -69,7 +69,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(Long id) {
         movieRepo.deleteById(id);
     }
 

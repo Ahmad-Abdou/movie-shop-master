@@ -10,7 +10,7 @@ public interface MovieService {
 
     MovieDto save (MovieDto bookdto);
 
-    MovieDto findById(String id);
+    MovieDto findById(Long id);
 
     List<MovieDto> findAll();
 
@@ -18,7 +18,7 @@ public interface MovieService {
 
     MovieDto update(MovieDto movieDto);
 
-    void deleteById(String id);
+    void deleteById(Long id);
 
 
 }

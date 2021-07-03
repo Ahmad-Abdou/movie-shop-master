@@ -1,0 +1,11 @@
+Useful Code:
+  Application.yml
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgres://ltvhxhxlpautap:f6691f9312138da319759a00028b5f82d6e96692afb03bdcf78e6e9d157807d5@ec2-3-231-69-204.compute-1.amazonaws.com:5432/ddptqk773ckib2
+    username: ltvhxhxlpautap
+    password: f6691f9312138da319759a00028b5f82d6e96692afb03bdcf78e6e9d157807d5
