@@ -1,12 +1,16 @@
 package com.ahmad.myproject.registeration.token;
 
 
-import com.ahmad.myproject.appuser.AppUser;
+import com.ahmad.myproject.registeration.appuser.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static org.hibernate.annotations.CascadeType.DELETE;
 
 @Getter
 @Setter

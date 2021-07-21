@@ -1,6 +1,6 @@
 package com.ahmad.myproject.repository;
 
-import com.ahmad.myproject.appuser.AppUser;
+import com.ahmad.myproject.registeration.appuser.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +26,10 @@ public interface AppUserRepository
     List<AppUser> findAppUserByEnabled(Boolean enable);
     @Query("SELECT  u FROM AppUser u WHERE u.appUserRole = :role")
     List<AppUser> findByAppUserRole(String role);
+
+    void deleteAppUserByEmail(String email);
+
+
+
 
 }

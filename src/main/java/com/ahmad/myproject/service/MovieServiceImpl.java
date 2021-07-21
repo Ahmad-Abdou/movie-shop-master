@@ -6,7 +6,6 @@ import com.ahmad.myproject.repository.MovieRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,12 +60,6 @@ public class MovieServiceImpl implements MovieService {
         return movieDto;
     }
 
-    @Override
-    public MovieDto update(MovieDto movieDto) {
-        Movie movie = movieRepo.save(modelMapper.map(movieDto, Movie.class));
-        MovieDto dto = modelMapper.map(movie, MovieDto.class);
-        return dto;
-    }
 
     @Override
     public void deleteById(Long id) {

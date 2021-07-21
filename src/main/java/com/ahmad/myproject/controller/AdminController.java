@@ -1,7 +1,7 @@
 package com.ahmad.myproject.controller;
 
 
-import com.ahmad.myproject.appuser.AppUser;
+import com.ahmad.myproject.registeration.appuser.AppUser;
 import com.ahmad.myproject.repository.AppUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

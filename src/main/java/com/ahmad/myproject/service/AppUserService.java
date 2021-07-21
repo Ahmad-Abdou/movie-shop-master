@@ -1,7 +1,7 @@
 package com.ahmad.myproject.service;
 
 
-import com.ahmad.myproject.appuser.AppUser;
+import com.ahmad.myproject.registeration.appuser.AppUser;
 import com.ahmad.myproject.registeration.token.ConfirmationToken;
 import com.ahmad.myproject.registeration.token.ConfirmationTokenService;
 import com.ahmad.myproject.repository.AppUserRepository;
@@ -54,6 +54,9 @@ public class AppUserService implements UserDetailsService {
     }
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
+    }
+    public void deleteByEmail(String email){
+        appUserRepository.deleteAppUserByEmail(email);
     }
 
 }

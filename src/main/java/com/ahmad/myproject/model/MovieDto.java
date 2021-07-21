@@ -9,6 +9,7 @@ public class MovieDto {
     private double price;
     private String description;
     private int quantity;
+
     private byte[] image;
 
 }
