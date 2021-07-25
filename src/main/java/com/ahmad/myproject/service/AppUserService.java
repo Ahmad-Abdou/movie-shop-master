@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class AppUserService implements UserDetailsService {
+public class AppUserService  {
 
     AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -29,14 +29,14 @@ public class AppUserService implements UserDetailsService {
         this.appUserRepository = appUserRepository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        return appUserRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("Not Found : "+email));
+    public AppUser loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        return appUserRepository.findAppUserByEmail(email).orElseThrow(()-> new UsernameNotFoundException("Not Found : "+email));
     }
 
     public String signUp(AppUser user){
-        Optional<AppUser> email =  appUserRepository.findByEmail(user.getEmail());
+        Optional<AppUser> email =  appUserRepository.findAppUserByEmail(user.getEmail());
         if(email.isPresent()){
             throw new IllegalStateException("Email already exist");
         }

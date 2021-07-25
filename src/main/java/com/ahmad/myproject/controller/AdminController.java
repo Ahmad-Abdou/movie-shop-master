@@ -14,6 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/admin/api/v1")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class AdminController {
     AppUserRepository appUserRepository;
 
@@ -40,7 +41,7 @@ public class AdminController {
     }
     @GetMapping("/email")
     public ResponseEntity<Optional<AppUser>> findByFirstEmail(@RequestParam(value = "email") String email){
-        Optional<AppUser> user = appUserRepository.findByEmail(email);
+        Optional<AppUser> user = appUserRepository.findAppUserByEmail(email);
         if(user.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }

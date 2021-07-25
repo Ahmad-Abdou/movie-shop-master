@@ -63,8 +63,7 @@ public class RegistrationController {
     }
     @GetMapping("/email")
     public ResponseEntity<AppUser> FindByEmail(@RequestParam String email){
-      AppUser appUser =  appUserRepository.findByEmail(email).get();
-        System.out.println(appUser);
+      AppUser appUser =  appUserRepository.findAppUserByEmail(email).get();
         return ResponseEntity.status(HttpStatus.OK).body(appUser);
     }
 }

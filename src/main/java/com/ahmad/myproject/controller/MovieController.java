@@ -1,26 +1,24 @@
 package com.ahmad.myproject.controller;
 
+import com.ahmad.myproject.entity.Movie;
 import com.ahmad.myproject.model.MovieDto;
+import com.ahmad.myproject.repository.MovieRepo;
 import com.ahmad.myproject.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.apache.commons.codec.binary.Base64;
-
-
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/movie")
@@ -29,6 +27,12 @@ public class MovieController {
 
 
     MovieService movieService;
+    MovieRepo movieRepo;
+
+    @Autowired
+    public void setMovieRepo(MovieRepo movieRepo) {
+        this.movieRepo = movieRepo;
+    }
 
     @Autowired
     public void setBookService(MovieService movieService) {
@@ -36,8 +40,8 @@ public class MovieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MovieDto>> getAll (){
-        return ResponseEntity.status(HttpStatus.OK).body(movieService.findAll());
+    public ResponseEntity<List<Movie>> getAll (){
+        return ResponseEntity.status(HttpStatus.OK).body( movieRepo.findAll().stream().filter(movie1 -> movie1.getImage() !=null).collect(Collectors.toList()));
     }
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> findById (@PathVariable("id") Long id){
@@ -58,6 +62,15 @@ public class MovieController {
         System.out.println(movieDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movieDto));
     }
+//    @PostMapping("/buy")
+//    public ResponseEntity<MovieDto> buy (@RequestBody MovieDto movieDto)  {
+//        Order order = new Order();
+//        order.setOrderDate(LocalDate.now());
+//        order.setOrderNumber(UUID.randomUUID().toString());
+//        order.setPaymentAmount(movieDto.getPrice()*movieDto.getQuantity());
+//        order.setPaymentStatus("Done");
+//        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movieDto));
+//    }
     @PutMapping("/edit/{id}")
     public ResponseEntity<MovieDto> update(@PathVariable("id")long id,@RequestBody MovieDto movieDto){
           MovieDto movieDto1= movieService.findById(id);
@@ -70,17 +83,24 @@ public class MovieController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<MovieDto> uploadFile(@RequestParam("file") MultipartFile multipartFile,@ModelAttribute MovieDto movieDto){
-        fileConvert(multipartFile, movieDto);
-        return ResponseEntity.status(HttpStatus.OK).body(movieService.save(movieDto));
+    public ResponseEntity<Movie> uploadFile(@RequestParam("file") MultipartFile multipartFile,@ModelAttribute Movie movie){
+        if(SignIn_Out.user == null){
+            throw new IllegalStateException("You have to sign in first ");
+        }
+        else
+        fileConvert(multipartFile, movie);
+        return ResponseEntity.status(HttpStatus.OK).body(movieRepo.save(movie));
     }
 
-    private void fileConvert(@RequestParam("file") MultipartFile multipartFile, @ModelAttribute MovieDto movieDto) {
+    public static void fileConvert(@RequestParam("file") MultipartFile multipartFile, @ModelAttribute Movie movie) {
+        if(SignIn_Out.user==null){
+            throw new IllegalStateException("You have to sign in first ");
+        }
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         Path path = Paths.get("src/main/resources/static/images/"+fileName);
         try{
             Files.copy(multipartFile.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-            movieDto.setImage(multipartFile.getBytes());
+            movie.setImage(multipartFile.getBytes());
 
         } catch (IOException e) {
             e.printStackTrace();
