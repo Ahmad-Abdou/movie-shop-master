@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 public class MovieController {
 
-
     MovieService movieService;
     MovieRepo movieRepo;
 
@@ -59,18 +58,9 @@ public class MovieController {
     }
     @PostMapping("/add")
     public ResponseEntity<MovieDto> create (@RequestBody MovieDto movieDto)  {
-        System.out.println(movieDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movieDto));
     }
-//    @PostMapping("/buy")
-//    public ResponseEntity<MovieDto> buy (@RequestBody MovieDto movieDto)  {
-//        Order order = new Order();
-//        order.setOrderDate(LocalDate.now());
-//        order.setOrderNumber(UUID.randomUUID().toString());
-//        order.setPaymentAmount(movieDto.getPrice()*movieDto.getQuantity());
-//        order.setPaymentStatus("Done");
-//        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.save(movieDto));
-//    }
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<MovieDto> update(@PathVariable("id")long id,@RequestBody MovieDto movieDto){
           MovieDto movieDto1= movieService.findById(id);

@@ -35,6 +35,7 @@ public class MyApplicationConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/v1/**","/api/movie").permitAll()
+//                .antMatchers("/api/v1/register","/api/v1/confirm/**","/api/v1/signin","/api/v1/buy").permitAll()
                 .antMatchers("/admin/api/**").hasRole(ADMIN.name())
                 .anyRequest().permitAll()
                 .and()
@@ -46,15 +47,5 @@ public class MyApplicationConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login");
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(appUserService);
-        provider.setPasswordEncoder(bCryptPasswordEncoder);
-        return provider;
-    }
+
 }
